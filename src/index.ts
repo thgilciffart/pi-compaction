@@ -1,7 +1,8 @@
-import { mkdirSync, readFileSync, renameSync, writeFileSync } from "node:fs";
+import { mkdirSync, renameSync, writeFileSync } from "node:fs";
 import { dirname, join } from "node:path";
 import { randomUUID } from "node:crypto";
 import { compact, getAgentDir, type ExtensionAPI, type ExtensionContext } from "@earendil-works/pi-coding-agent";
+import { editConfig } from "./editor.ts";
 import { modelParts, parseConfig, readConfig, resolvePolicy, shouldAutoCompact, type Policy } from "./config.ts";
 
 export default function compaction(pi: ExtensionAPI) {
@@ -58,22 +59,29 @@ export default function compaction(pi: ExtensionAPI) {
 	});
 
 	pi.registerCommand("compaction-settings", {
-		description: "Show effective compaction settings, or edit the global file with 'edit'",
+		description: "Open the compaction settings menu, or use 'show' to view the effective policy",
 		handler: async (args, ctx) => {
 			try {
-				if (args.trim() === "edit") {
-					if (!ctx.hasUI) throw new Error(`Edit ${globalPath} with a text editor in this mode`);
-					let text = "{}\n";
-					try { text = readFileSync(globalPath, "utf8"); } catch (error) { if ((error as NodeJS.ErrnoException).code !== "ENOENT") throw error; }
-					const edited = await ctx.ui.editor("Global compaction settings", text);
-					if (edited === undefined) return;
-					const config = parseConfig(JSON.parse(edited));
-					mkdirSync(dirname(globalPath), { recursive: true });
-					const temp = `${globalPath}.${randomUUID()}.tmp`;
-					writeFileSync(temp, `${JSON.stringify(config, null, "\t")}\n`, { mode: 0o600 });
-					renameSync(temp, globalPath);
-				} else if (args.trim()) throw new Error("Use /compaction-settings or /compaction-settings edit");
-				ctx.ui.notify(`${globalPath}\nEffective settings for ${ctx.model ? `${ctx.model.provider}/${ctx.model.id}` : "no model"}:\n${JSON.stringify(settings(ctx), null, 2)}`, "info");
+				const action = args.trim();
+				if (action && action !== "edit" && action !== "show") throw new Error("Use /compaction-settings or /compaction-settings show");
+				if (action === "show" || (!action && !ctx.hasUI)) {
+					ctx.ui.notify(`${globalPath}\nEffective settings for ${ctx.model ? `${ctx.model.provider}/${ctx.model.id}` : "no model"}:\n${JSON.stringify(settings(ctx), null, 2)}`, "info");
+					return;
+				}
+				if (!ctx.hasUI) throw new Error(`Edit ${globalPath} with a text editor in this mode`);
+				const scope = ctx.isProjectTrusted() ? await ctx.ui.select("Edit compaction settings", ["Global", "This project"]) : "Global";
+				if (!scope) return;
+				const path = scope === "Global" ? globalPath : join(ctx.cwd, ".pi", "compaction.json");
+				const edited = await editConfig(ctx, readConfig(path), scope);
+				if (edited === undefined) return;
+				// Recheck trust after dialogs before writing project settings.
+				if (scope !== "Global" && !ctx.isProjectTrusted()) throw new Error("Project trust is required to save project settings");
+				const config = parseConfig(edited);
+				mkdirSync(dirname(path), { recursive: true });
+				const temp = `${path}.${randomUUID()}.tmp`;
+				writeFileSync(temp, `${JSON.stringify(config, null, "\t")}\n`, { mode: 0o600 });
+				renameSync(temp, path);
+				ctx.ui.notify(`Saved ${scope.toLowerCase()} compaction settings. Changes apply at the next compaction check.`, "info");
 			} catch (error) { report(ctx, error); }
 		},
 	});

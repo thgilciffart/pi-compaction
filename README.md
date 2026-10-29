@@ -22,7 +22,18 @@ Restart Pi or run `/reload` after installation. Keep using `/compact` and `/comp
 
 ## Configure compaction
 
-Run `/compaction-settings edit` to edit the global JSON file in Pi. The command validates the JSON before it saves.
+Run `/compaction-settings` to open the menu editor. Use the arrow keys to select an item and Enter to open it.
+
+1. Choose **Global** or **This project**. The project option appears only for trusted projects.
+2. Open **Defaults**, **Policies by conversation model**, or **Override all models**.
+3. Choose the model, reasoning effort, automatic compaction switch, and context threshold. Model selection lists providers first, then models with configured credentials.
+4. Use **Back** to return to the main menu, then select **Save changes**.
+
+Each field shows its configured value. Select **Inherit** to remove that value and use the next applicable policy. Summary instructions have a separate text editor.
+
+Changes stay in memory until you save. **Discard changes** or Escape at the main menu closes the editor without saving. `/compaction-settings edit` opens the same menu.
+
+To inspect the resolved policy for the current conversation model, run `/compaction-settings show`. In a mode without dialogs, `/compaction-settings` also shows the resolved policy.
 
 You can also create `~/.pi/agent/compaction.json` in a text editor. If `PI_CODING_AGENT_DIR` is set, Pi uses that directory instead.
 
@@ -50,7 +61,7 @@ You can also create `~/.pi/agent/compaction.json` in a text editor. If `PI_CODIN
 
 Replace the example model IDs with models available in your Pi installation. Configure credentials through Pi's provider settings or `/login`.
 
-Run `/compaction-settings` to show the resolved policy for the current conversation model. File changes take effect at the next compaction check. No reload is required.
+Saved changes take effect at the next compaction check. No reload is required.
 
 A trusted project can add `.pi/compaction.json` with the same structure. The extension ignores project configuration until Pi grants project trust.
 
@@ -135,7 +146,7 @@ npm pack --dry-run
 
 The tests exercise Pi's real summarizer with a simulated provider. They cover configuration precedence, project trust, model routing, reasoning effort, split turns, usage accounting, automatic thresholds, and truncated summaries. They do not make paid model requests.
 
-Test locally with `pi -e ./src/index.ts`. Run `/compaction-settings edit`, start a conversation, and use `/compact` to check your provider credentials and selected model.
+Test locally with `pi -e ./src/index.ts`. Run `/compaction-settings`, start a conversation, and use `/compact` to check your provider credentials and selected model.
 
 The manifest declares the extension entry point and the `pi-package` keyword required for the [Pi package catalog](https://pi.dev/docs/latest/packages). The published package contains TypeScript source and requires no build step.
 

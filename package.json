@@ -1,24 +1,50 @@
 {
   "name": "@thgilciffart/pi-compaction",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "description": "Configure Pi compaction models, reasoning effort, and automatic compaction by conversation model.",
   "type": "module",
   "license": "MIT",
   "author": "thgilciffart",
-  "repository": { "type": "git", "url": "git+https://github.com/thgilciffart/pi-compaction.git" },
-  "bugs": { "url": "https://github.com/thgilciffart/pi-compaction/issues" },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/thgilciffart/pi-compaction.git"
+  },
+  "bugs": {
+    "url": "https://github.com/thgilciffart/pi-compaction/issues"
+  },
   "homepage": "https://github.com/thgilciffart/pi-compaction#readme",
-  "keywords": ["pi-package", "pi", "compaction"],
-  "files": ["src", "config.schema.json", "examples", "README.md", "CHANGELOG.md", "LICENSE"],
-  "pi": { "extensions": ["./src/index.ts"] },
-  "engines": { "node": ">=22.19.0" },
-  "publishConfig": { "access": "public" },
+  "keywords": [
+    "pi-package",
+    "pi",
+    "compaction"
+  ],
+  "files": [
+    "src",
+    "config.schema.json",
+    "examples",
+    "README.md",
+    "CHANGELOG.md",
+    "LICENSE"
+  ],
+  "pi": {
+    "extensions": [
+      "./src/index.ts"
+    ]
+  },
+  "engines": {
+    "node": ">=22.19.0"
+  },
+  "publishConfig": {
+    "access": "public"
+  },
   "scripts": {
     "check": "tsc --noEmit",
     "test": "tsx --test test/*.test.ts",
     "prepack": "npm run check && npm test"
   },
-  "peerDependencies": { "@earendil-works/pi-coding-agent": ">=1.4.0 <2" },
+  "peerDependencies": {
+    "@earendil-works/pi-coding-agent": ">=1.4.0 <2"
+  },
   "devDependencies": {
     "@earendil-works/pi-coding-agent": "1.4.0",
     "@types/node": "^22.0.0",
