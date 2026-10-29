@@ -1,0 +1,78 @@
+{
+	"$schema": "https://json-schema.org/draft/2020-12/schema",
+	"title": "Pi compaction configuration",
+	"type": "object",
+	"additionalProperties": false,
+	"properties": {
+		"$schema": {
+			"type": "string"
+		},
+		"defaults": {
+			"$ref": "#/$defs/policy"
+		},
+		"models": {
+			"type": "object",
+			"propertyNames": {
+				"pattern": "^[^/\\s]+/\\S+$"
+			},
+			"additionalProperties": {
+				"$ref": "#/$defs/policy"
+			}
+		},
+		"override": {
+			"$ref": "#/$defs/policy"
+		}
+	},
+	"$defs": {
+		"policy": {
+			"type": "object",
+			"additionalProperties": false,
+			"properties": {
+				"model": {
+					"type": "string",
+					"anyOf": [
+						{
+							"const": "current"
+						},
+						{
+							"pattern": "^[^/\\s]+/\\S+$"
+						}
+					]
+				},
+				"effort": {
+					"enum": [
+						"off",
+						"minimal",
+						"low",
+						"medium",
+						"high",
+						"xhigh"
+					]
+				},
+				"auto": {
+					"type": "object",
+					"additionalProperties": false,
+					"properties": {
+						"enabled": {
+							"type": "boolean"
+						},
+						"thresholdPercent": {
+							"type": "number",
+							"exclusiveMinimum": 0,
+							"exclusiveMaximum": 100
+						}
+					}
+				},
+				"instructions": {
+					"type": "string"
+				},
+				"onError": {
+					"enum": [
+						"cancel",
+						"default"
+					]
+				}
+			}
+		}
+	}
+}
