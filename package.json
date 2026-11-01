@@ -43,10 +43,12 @@
     "prepack": "npm run check && npm test"
   },
   "peerDependencies": {
-    "@earendil-works/pi-coding-agent": ">=1.4.0 <2"
+    "@earendil-works/pi-coding-agent": ">=1.4.0 <2",
+    "@earendil-works/pi-tui": ">=1.4.0 <2"
   },
   "devDependencies": {
     "@earendil-works/pi-coding-agent": "1.4.0",
+    "@earendil-works/pi-tui": "1.4.0",
     "@types/node": "^22.0.0",
     "tsx": "^4.20.0",
     "typescript": "^5.9.0"

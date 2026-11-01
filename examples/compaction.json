@@ -2,16 +2,21 @@
 	"defaults": {
 		"model": "current",
 		"effort": "low",
-		"auto": { "enabled": true, "thresholdPercent": 75 },
+		"auto": {
+			"enabled": true,
+			"thresholdPercent": 75
+		},
 		"instructions": "Preserve decisions, unfinished work, and test results.",
-		"onError": "cancel"
+		"onError": "cancel",
+		"style": "native"
 	},
 	"models": {
 		"anthropic/claude-sonnet-4-5": {
 			"model": "anthropic/claude-haiku-4-5",
 			"effort": "off",
-			"auto": { "thresholdPercent": 80 }
+			"auto": {
+				"thresholdPercent": 80
+			}
 		}
-	},
-	"override": {}
+	}
 }

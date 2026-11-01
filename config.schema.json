@@ -18,9 +18,6 @@
 			"additionalProperties": {
 				"$ref": "#/$defs/policy"
 			}
-		},
-		"override": {
-			"$ref": "#/$defs/policy"
 		}
 	},
 	"$defs": {
@@ -60,7 +57,18 @@
 							"type": "number",
 							"exclusiveMinimum": 0,
 							"exclusiveMaximum": 100
+						},
+						"thresholdTokens": {
+							"type": "integer",
+							"minimum": 1,
+							"maximum": 9007199254740991
 						}
+					},
+					"not": {
+						"required": [
+							"thresholdPercent",
+							"thresholdTokens"
+						]
 					}
 				},
 				"instructions": {
@@ -70,6 +78,40 @@
 					"enum": [
 						"cancel",
 						"default"
+					]
+				},
+				"style": {
+					"enum": [
+						"native",
+						"claude-code",
+						"codex",
+						"custom"
+					]
+				},
+				"prompt": {
+					"oneOf": [
+						{
+							"type": "object",
+							"additionalProperties": false,
+							"required": [
+								"system",
+								"summary"
+							],
+							"properties": {
+								"system": {
+									"type": "string",
+									"pattern": "\\S"
+								},
+								"summary": {
+									"type": "string",
+									"pattern": "\\S"
+								}
+							}
+						},
+						{
+							"type": "string",
+							"pattern": "^(global|project)/[a-zA-Z0-9][a-zA-Z0-9_-]*$"
+						}
 					]
 				}
 			}
