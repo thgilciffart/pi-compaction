@@ -2,6 +2,7 @@
 
 ## Unreleased
 
+- Align the README with the published npm package and make the npm install command the primary option.
 - Use Delete to remove checked or highlighted policies in the model picker, or all selected policies in their editor.
 - Add selected models to policies when editing from any model view, even if their fields remain unset.
 - Mark unsaved field and policy changes with `*`, and add Save changes and Discard changes to policy editors.

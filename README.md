@@ -1,21 +1,21 @@
 # Pi compaction
 
-Choose a compaction style, model, and reasoning effort for `/compact`. Set shared defaults and policies for each conversation model.
+Configure Pi compaction models, reasoning effort, and automatic compaction by conversation model. You can also pick a compaction style and summary instructions for `/compact`, and set shared defaults and policies for each conversation model.
 
 This extension requires Pi 1.4.0 or later in the 1.x series, distributed as `@earendil-works/pi-coding-agent`. It does not support the older `@mariozechner` releases.
 
 ## Install
 
-Install from GitHub:
-
-```sh
-pi install git:github.com/thgilciffart/pi-compaction
-```
-
-After the package is published to npm, install it with:
+Install the npm package:
 
 ```sh
 pi install npm:@thgilciffart/pi-compaction
+```
+
+To install from the GitHub repository instead, run:
+
+```sh
+pi install git:github.com/thgilciffart/pi-compaction
 ```
 
 Restart Pi or run `/reload` after installation. Keep using `/compact` and `/compact <instructions>`.
